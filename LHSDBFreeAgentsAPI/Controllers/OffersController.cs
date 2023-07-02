@@ -67,7 +67,7 @@ namespace LHSDBFreeAgentsAPI.Controllers
                 return NotFound(e);
             }
 
-            return Ok("Offer deleted correctly");
+            return Ok();
 
         }
 
