@@ -1,6 +1,7 @@
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.Extensions.NETCore.Setup;
+using Amazon.Runtime.Internal.Util;
 using LHSDBFreeAgentsAPI.Mappers;
 using LHSDBFreeAgentsAPI.Repositories;
 using LHSDBFreeAgentsAPI.Repositories.DynamoDBImpl;
@@ -8,6 +9,7 @@ using LHSDBFreeAgentsAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -92,7 +94,7 @@ namespace LHSDBFreeAgentsAPI
                     Region = RegionEndpoint.GetBySystemName("us-east-2")
                 });
 
-
+            services.AddHealthChecks();
             services.AddControllers().AddNewtonsoftJson();
             services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddRazorPages().AddNewtonsoftJson();
@@ -122,10 +124,12 @@ namespace LHSDBFreeAgentsAPI
 
             app.UseAuthentication();
             app.UseAuthorization();
-          
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
+
             });
         }
     }
